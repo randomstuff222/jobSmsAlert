@@ -33,8 +33,9 @@ def access_nested_dictionary(dictionary:list, keys:list):
 def check_file(link:str, file_path:str, job_path:list, job_id_name:str, job_title_name:str):
     response_API = requests.get(link).json()
     collected_list = []
-    previous_response_html = []
+    previous_response = []
     responseAPI_jobs = access_nested_dictionary(response_API, job_path)
+    #save/collect the list of jobs from the request 
     for i in responseAPI_jobs:
         collected_list.append(i[job_id_name])
     if not os.path.exists(file_path):
@@ -42,17 +43,19 @@ def check_file(link:str, file_path:str, job_path:list, job_id_name:str, job_titl
 
     with open(file_path, "rb") as file:
         try:
-            previous_response_html = pickle.load(file)
+            previous_response = pickle.load(file)
 
         #if file is empty, make the collected list to be the first one
         except EOFError:
-            previous_response_html = collected_list[:]
+            previous_response = collected_list[:]
 
     #the difference will always return the new element coming from the collected_list, which will be the new job added
 
-    diff_elements = set(collected_list) - set(previous_response_html)
+    diff_elements = set(collected_list) - set(previous_response)
+    #if there aren't new job ids added to the list, there aren't any new jobs posted
     if not diff_elements:
         return None
+    #if there is a new job id, then write it on the file, and then return the newly added job id and title
     with open(file_path, "wb") as file:
         pickle.dump(collected_list, file)
     filtered_objects = [f'{obj[job_id_name]} = {obj[job_title_name]}\n\n' for obj in responseAPI_jobs if obj[job_id_name] in diff_elements]
