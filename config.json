@@ -1,0 +1,6 @@
+{
+    "email": "INSERT GMAIL", 
+    "password": "INSERT PASSWOR OBTAINED FROM SECURE APPS SETTINGS",
+    "number": "PHONE NUMBER",
+    "provider": "PHONE NUMBER'S PROVIDER, HAS TO BE ON THE PROVIDERS.PY FILE "
+}
