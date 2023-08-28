@@ -1,6 +1,5 @@
 import requests
 import os
-from bs4 import BeautifulSoup
 from smsAlert import smsAlert
 import time
 import logging
